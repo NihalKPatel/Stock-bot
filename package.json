@@ -1,0 +1,30 @@
+{
+  "name": "habibi-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "alpha-vantage-cli": "^1.0.8",
+    "await": "^0.2.6",
+    "axios": "^0.21.1",
+    "axios-react": "^2.0.2",
+    "discord-youtube-api": "^0.1.0",
+    "discord.js": "^12.3.1",
+    "finnhub": "^1.2.1",
+    "fs-js": "^1.0.6",
+    "functions": "^1.0.9",
+    "get-json": "^1.0.1",
+    "giphy-api": "^2.0.1",
+    "guild": "^1.2.2",
+    "is-function": "^1.0.2",
+    "nodejs-currency-converter": "^1.0.2",
+    "utf8": "^3.0.0",
+    "yahoo-finance": "^0.3.6"
+  }
+}

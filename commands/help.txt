@@ -1,0 +1,20 @@
+Commands:
+Type /flip - to flip a coin.
+Type Yas - for content.
+Type Suwesh - for tag.
+Type /dick @name - for accurate dick size.
+Type /ping - for ping.
+
+----------------------------------------
+Stocks
+/Tesla - for current Stock Price
+/Apple - for current Stock Price
+/Air NZ - for current Stock Price
+/BITCOIN
+/PLTR
+/BOTZ
+/TRQ
+/SPY
+/PFE
+/SPOT
+/MODERNA
