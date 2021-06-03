@@ -1,3 +1,6 @@
 # Stock bot
- Discord Stock bot
-For Crypto and Stocks
+ Discord Stock bot for Crypto and Stocks
+
+Install Dependencies 
+     
+     $ npm install
