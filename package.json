@@ -12,7 +12,7 @@
   "dependencies": {
     "alpha-vantage-cli": "^1.0.8",
     "await": "^0.2.6",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "axios-react": "^2.0.2",
     "discord-youtube-api": "^0.1.0",
     "discord.js": "^12.3.1",

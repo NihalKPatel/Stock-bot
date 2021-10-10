@@ -2,16 +2,11 @@
 const Discord = require('discord.js');
 const axios = require('axios')
 const fs = require('fs')
-var await = require('await')
+const await = require('await');
 const client = new Discord.Client();
-const { prefix, token } = require('./src/config.json');
-const utils = require('./src/utils');
+const { prefix, token } = require('./config.json');
 let commandsList = fs.readFileSync('commands/help.txt', 'utf8')
-const {userinfo, checkLeague} = require('./src/profile.js');
 
-const moment = require('moment');
-const request = require('bluebird').promisifyAll(require('request'), { multiArgs: true });
-const convertCurrency = require('nodejs-currency-converter');
 
 
 
@@ -29,30 +24,30 @@ client.on('message', async message => {
 
 //Help
 if (message.content.toLowerCase() === (prefix)+"help"){
-    message.channel.send(commandsList);
+    await message.channel.send(commandsList);
 }
 
 //Ping
 if(message.content.toLowerCase().startsWith("/ping")) {
-    message.channel.send(new Date().getTime() - message.createdTimestamp + " ms");
+    await message.channel.send(new Date().getTime() - message.createdTimestamp + " ms");
 }
 
 //COIN FILP
 if (message.content.toLowerCase() === (prefix)+"flip"){
-    
-    var x = Math.floor(Math.random() * 3)
+
+    const x = Math.floor(Math.random() * 3);
     if (x === 1){
-        message.channel.send('Heads');
+        await message.channel.send('Heads');
     } else if (x === 2){
-        message.channel.send('Tails');
+        await message.channel.send('Tails');
     }
 }
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 
 //Stocks
 if (message.content.startsWith(prefix)){
-    var crypto = message.content.replace(/\s/g, '')+"USD";
-    stockies(crypto.toUpperCase());
+    const crypto = message.content.replace(/\s/g, '') + "USD";
+    await stockies(crypto.toUpperCase());
     async function stockies(command) {
         command = command.substring(1);
         let stock = async () => {
@@ -66,52 +61,14 @@ if (message.content.startsWith(prefix)){
         let quoteValue = await stock();
         quoteValue = quoteValue[0];
         console.log(quoteValue);
-        message.channel.send(`\nHeres your Stock Price for ${quoteValue.symbol}(${quoteValue.name}):\n$${quoteValue.price} USD.\n`);
+        await message.channel.send(`\nHeres your Stock Price for ${quoteValue.symbol}(${quoteValue.name}):\n$${quoteValue.price} USD.\n`);
 
-        const fixerUrl = 'https://api.fixer.io';
-
-        const convertCurrency = (value = Number('quoteValue.price')) => {
-
-          return new Promise((resolve, reject) => request.getAsync(`${fixerUrl}/${formatedDay}?base=$USD`).then((response) => {
-            const parsedResponse = JSON.parse(response[1]);
-
-            if (typeof value !== 'number') reject(new Error('Value to convert is NaN.'));
-            if (parsedResponse.error === 'Invalid base') {
-                reject(new Error('Invalid currency base.'));
-            } else if (!Object.keys(parsedResponse.rates).includes('NZD')) {
-                reject(new Error('Invalid currency to convert.'));
-            }
-            console.log(convertedValue);
-            console.log("HOLYHABIBÍ");
-              
-            const rateFrom = parsedResponse.rates['NZD'];
-            const convertedValue = value * rateFrom;
-            resolve({
-              currencyFrom,
-              currencyTo,
-              value,
-              convertedValue,
-            });
-            
-          }));
-        };
-        
-        test('test module', () => {
-          expect.assertions(1);
-
-            return convertCurrency(Number(quoteValue.price), 'USD', 'NZD').then(response => {
-            expect(response).toBeDefined();
-            console.log("HOLYHABIBÍ");
-
-            })
-        });
-        
     }
 }
 
     if (message.content.startsWith(prefix)){
-        var origMessage = message.content.replace(/\s/g, '');
-        stockies(pre_afterhours.toUpperCase());
+        const origMessage = message.content.replace(/\s/g, '');
+        await stockies(origMessage.toUpperCase());
         if (url.indexOf("https://www.marketwatch.com/investing/stock/")===0){
         const getScript = (url) => {
             return new Promise((resolve, reject) => {
@@ -144,19 +101,19 @@ if (message.content.startsWith(prefix)){
             });
         };
 
-        (async (url) => {
-            
-            var date = new Date();
-            var current_hour = date.getHours();
-            var current_minute = date.getMinutes();
+        await (async (url) => {
+
+            const date = new Date();
+            const current_hour = date.getHours();
+            const current_minute = date.getMinutes();
             //if ((current_hour <= 15 && current_minute <= 30) || (current_hour >= 21 && current_minute >= 30)) {
             if ((current_hour >= 0 && current_hour < 3 || (current_hour == 3 && current_minute < 30)) || (current_hour >= 10 && current_hour <= 23)) {
                 // This should allow for all hours outside of open market to trigger? */
-            console.log(url);
-            console.log(await getScript(url));
+                console.log(url);
+                console.log(await getScript(url));
             }
             //}
-        })(`https://www.marketwatch.com/investing/stock/${pre_afterhours.split("/")[1].split("(")[0].toLowerCase()}`);
+        })(`https://www.marketwatch.com/investing/stock/${origMessage.split("/")[1].split("(")[0].toLowerCase()}`);
     }
     }
     
