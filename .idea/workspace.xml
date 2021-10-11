@@ -4,7 +4,10 @@
     <list default="true" id="e7014b28-64ea-4b2c-9b77-ad958ab41097" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/help.txt" beforeDir="false" afterPath="$PROJECT_DIR$/commands/help.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/npm" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +68,7 @@
       <workItem from="1626659145655" duration="54000" />
       <workItem from="1626659235486" duration="2394000" />
       <workItem from="1626676293735" duration="126000" />
-      <workItem from="1633962305478" duration="4710000" />
+      <workItem from="1633962305478" duration="4887000" />
     </task>
     <servers />
   </component>
