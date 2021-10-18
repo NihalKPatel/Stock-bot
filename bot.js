@@ -6,9 +6,6 @@ const client = new Discord.Client();
 const { prefix, token } = require('./config.json');
 let commandsList = fs.readFileSync('commands/help.txt', 'utf8')
 
-
-
-
 // when the client is ready, run this code
 // this event will only trigger one time after logging in
 
@@ -65,7 +62,7 @@ if (message.content.toLowerCase() === (prefix)+"flip"){
     }
 }
 
-    if (message.content.startsWith(prefix)+"crypto"){
+    if (message.content.startsWith("/crypto")){
         const crypto = message.content.replace(/\s/g, '') + "USD";
         await stockies(crypto.toUpperCase());
 
@@ -81,7 +78,6 @@ if (message.content.toLowerCase() === (prefix)+"flip"){
             quoteValue = quoteValue[0];
             console.log(quoteValue);
             await message.channel.send(`\nHeres your Stock Price for ${quoteValue.symbol}(${quoteValue.name}):\n$${quoteValue.price} USD.\n`);
-
         }
     }
 
@@ -137,11 +133,6 @@ if (message.content.toLowerCase() === (prefix)+"flip"){
         })(`https://www.marketwatch.com/investing/stock/${origMessage.split("/")[1].split("(")[0].toLowerCase()}`);
         }
     }
-
-    /*
-
-
-
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 });
