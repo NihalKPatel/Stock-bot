@@ -1,141 +1,91 @@
-// require the discord.js module
-const Discord = require('discord.js');
-const axios = require('axios')
-const fs = require('fs')
-const client = new Discord.Client();
-const { prefix, token } = require('./config.json');
-let commandsList = fs.readFileSync('commands/help.txt', 'utf8')
+// Require the necessary modules
+const { Client, Intents } = require('discord.js');
+const axios = require('axios');
+const fs = require('fs');
+const config = require('./config.json');
 
-// when the client is ready, run this code
-// this event will only trigger one time after logging in
+// Create a new Discord client
 
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+// Read the commands from the help file
+const helpText = fs.readFileSync('commands/help.txt', 'utf8');
+
+// Event listener for when the bot is ready
 client.once('ready', () => {
-return console.log('It Works Ready!');
+    console.log('Bot is ready!');
 });
 
-/*-----------------------------------------------------------------------------------------------------------------------------*/
-
-
+// Event listener for incoming messages
 client.on('message', async message => {
-
-
-//Help
-if (message.content.toLowerCase() === (prefix)+"help"){
-    await message.channel.send(commandsList);
-}
-
-//Ping
-if (message.content.toLowerCase().startsWith("/ping")) {
-    await message.channel.send(new Date().getTime() - message.createdTimestamp + " ms");
-}
-
-//COIN FILP
-if (message.content.toLowerCase() === (prefix)+"flip"){
-
-    const x = Math.floor(Math.random() * 3);
-    if (x === 1) {
-        await message.channel.send('Heads');
-    } else if (x === 2) {
-        await message.channel.send('Tails');
+    // Ignore messages from other bots and messages that don't start with the prefix
+    if (message.author.bot || !message.content.startsWith(prefix)) {
+        return;
     }
-}
-    /*-----------------------------------------------------------------------------------------------------------------------------*/
 
-//
-    if (message.content.startsWith("/stock")) {
-        const crypto = message.content.replace(/\s/g, '');
-        await stockies(crypto.toUpperCase());
+    // Remove the prefix from the message content and convert to lowercase
+    const args = message.content.slice(prefix.length).trim().toLowerCase().split(/\s+/);
+    const command = args.shift();
 
-        async function stockies(command) {
-            command = command.substring(6);
-            let stock = async () => {
-                let response = await axios.get(`https://financialmodelingprep.com/api/v3/quote/${command}?apikey=77ec0dcfd99692661c435742dc66dbb3`);
-                console.log(command);
-                console.log(`https://financialmodelingprep.com/api/v3/quote/${command}?apikey=77ec0dcfd99692661c435742dc66dbb3`);
-                return response.data;
-        };
-        let quoteValue = await stock();
-        quoteValue = quoteValue[0];
-        console.log(quoteValue);
-        await message.channel.send(`\nHeres your Stock Price for ${quoteValue.symbol}(${quoteValue.name}):\n$${quoteValue.price} USD.\n`);
-
+    // Help command
+    if (command === 'help') {
+        await message.channel.send(helpText);
     }
-}
 
-    if (message.content.startsWith("/crypto")){
-        const crypto = message.content.replace(/\s/g, '') + "USD";
-        await stockies(crypto.toUpperCase());
+    // Ping command
+    if (command === 'ping') {
+        const ping = Date.now() - message.createdTimestamp;
+        await message.channel.send(`Latency is ${ping}ms.`);
+    }
 
-        async function stockies(command) {
-            command = command.substring(7);
-            let stock = async () => {
-                let response = await axios.get(`https://financialmodelingprep.com/api/v3/quote/${command}?apikey=77ec0dcfd99692661c435742dc66dbb3`);
-                console.log(command);
-                console.log(`https://financialmodelingprep.com/api/v3/quote/${command}?apikey=77ec0dcfd99692661c435742dc66dbb3`);
-                return response.data;
-            };
-            let quoteValue = await stock();
-            quoteValue = quoteValue[0];
-            console.log(quoteValue);
-            await message.channel.send(`\nHeres your Stock Price for ${quoteValue.symbol}(${quoteValue.name}):\n$${quoteValue.price} USD.\n`);
+    // Coin flip command
+    if (command === 'flip') {
+        const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
+        await message.channel.send(result);
+    }
+
+    // Stock and crypto commands
+    if (['stock', 'crypto'].includes(command)) {
+        // Extract the stock or crypto symbol from the arguments
+        const symbol = args[0];
+        if (!symbol) {
+            return await message.channel.send('Please provide a valid symbol.');
+        }
+
+        try {
+            // Make API call to get the stock or crypto price
+            const response = await axios.get(`https://financialmodelingprep.com/api/v3/quote/${symbol}?apikey=${config.apiKey}`);
+            const quote = response.data[0];
+
+            // Send the price information to the channel
+            const messageText = `Here's the price for ${quote.symbol} (${quote.name}):\n$${quote.price} USD.`;
+            await message.channel.send(messageText);
+        } catch (error) {
+            await message.channel.send('Error retrieving price information.');
         }
     }
 
+    // After hours stock price command
+    if (command === 'afterhours') {
+        // Extract the stock symbol from the arguments
+        const symbol = args[0];
+        if (!symbol) {
+            return await message.channel.send('Please provide a valid symbol.');
+        }
 
+        try {
+            // Make API call to get the after hours stock price
+            const url = `https://www.marketwatch.com/investing/stock/${symbol.toLowerCase()}`;
+            const response = await axios.get(url);
+            const priceText = response.data.split('<bg-quote class="value"')[1].split('data-field="last"')[1].split('>')[1].split('</')[0];
 
-    if (message.content.startsWith(prefix)){
-        const origMessage = message.content.replace(/\s/g, '');
-        await stockies(origMessage.toUpperCase());
-        let url;
-        if (url.indexOf("https://www.marketwatch.com/investing/stock/")===0){
-        const getScript = (url) => {
-            return new Promise((resolve, reject) => {
-                const https     = require('https');
-
-                let client = require('http');
-
-                if (url.toString().indexOf("https") === 0) {
-                    client = https;
-                }
-
-                client.get(url, (resp) => {
-                    let data = '';
-
-                    // A chunk of data has been recieved.
-                    resp.on('data', (chunk) => {
-                        data += chunk;
-                    });
-
-                    // The whole response has been received. Print out the result.
-                        resp.on('end', () => {
-                                message.channel.send("\nAfter Hours Price is currently:\n$" + data.split('<h3 class="intraday__price ">')[1].split("</bg-quote>")[0].split('session="')[1].split('">')[1] + " USD.");
-                        });
-
-                }).on("error", (err) => {
-                    reject(err);
-                });
-
-            });
-        };
-
-        await (async (url) => {
-
-            const date = new Date();
-            const current_hour = date.getHours();
-            const current_minute = date.getMinutes();
-            //if ((current_hour <= 15 && current_minute <= 30) || (current_hour >= 21 && current_minute >= 30)) {
-            if ((current_hour >= 0 && current_hour < 3 || (current_hour === 3 && current_minute < 30)) || (current_hour >= 10 && current_hour <= 23)) {
-                // This should allow for all hours outside of open market to trigger? */
-                console.log(url);
-                console.log(await getScript(url));
-            }
-            //}
-        })(`https://www.marketwatch.com/investing/stock/${origMessage.split("/")[1].split("(")[0].toLowerCase()}`);
+            // Send the price information to the channel
+            const messageText = `After hours price for ${symbol.toUpperCase()}: $${priceText} USD.`;
+            await message.channel.send(messageText);
+        } catch (error) {
+            await message.channel.send('Error retrieving price information.');
         }
     }
-
-/*-----------------------------------------------------------------------------------------------------------------------------*/
 });
-// login to Discord with your app's token
-client.login(token).then(() =>{});
 
+// Log in to Discord with the bot token
+client.login(config.token).then(r => console.log('Logged in!')).catch(e => console.log(e));
